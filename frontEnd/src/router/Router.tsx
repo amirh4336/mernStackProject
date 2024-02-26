@@ -3,6 +3,7 @@ import Users from "../user/pages/Users";
 import NotFound from "../shared/pages/NotFound";
 import NewPlaces from "../places/pages/NewPlaces";
 import RootLayout from "../layout/RootLayout";
+import UserPlaces from "../places/pages/UserPlaces";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
       {
         path: "/places/new",
         element: <NewPlaces />,
+      },
+      {
+        path: "/:userId/places",
+        element: <UserPlaces />,
       },
       {
         path: "*",
