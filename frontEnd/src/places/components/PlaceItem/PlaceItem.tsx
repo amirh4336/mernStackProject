@@ -1,6 +1,7 @@
 import { FC } from "react";
 import "./PlaceItem.css";
 import Card from "../../../shared/components/UIElements/Card/Card";
+import Button from "../../../shared/components/FormElements/Button";
 
 export interface IPlaceItemProps {
   id: string;
@@ -16,12 +17,12 @@ export interface IPlaceItemProps {
 }
 
 const PlaceItem: FC<IPlaceItemProps> = ({
+  id,
   imageUrl,
   title,
   address,
   description,
 }) => {
-
   return (
     <li className="place-item">
       <Card className="place-item__content">
@@ -34,9 +35,9 @@ const PlaceItem: FC<IPlaceItemProps> = ({
           <p>{description}</p>
         </div>
         <div className="place-item__actions">
-          <button>View on map</button>
-          <button>Edit</button>
-          <button>Delete</button>
+          <Button inverse>View on map</Button>
+          <Button to={`/places/${id}`}>Edit</Button>
+          <Button danger>Delete</Button>
         </div>
       </Card>
     </li>
