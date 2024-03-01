@@ -1,0 +1,6 @@
+.leaflet-container {
+  height: 15rem;
+  overflow: hidden;
+  position: relative;
+  outline: none;
+}

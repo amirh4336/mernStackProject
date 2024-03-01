@@ -1,8 +1,10 @@
 import { FC, useState } from "react";
-import "./PlaceItem.css";
 import Card from "../../../shared/components/UIElements/Card/Card";
 import Button from "../../../shared/components/FormElements/Button";
 import Modal from "../../../shared/components/UIElements/Modal/Modal";
+import Map from "../../../shared/components/UIElements/Map/Map";
+
+import "./PlaceItem.css";
 
 export interface IPlaceItemProps {
   id: string;
@@ -23,6 +25,7 @@ const PlaceItem: FC<IPlaceItemProps> = ({
   title,
   address,
   description,
+  location,
 }) => {
   const [showMap, setShowMap] = useState(false);
 
@@ -33,6 +36,8 @@ const PlaceItem: FC<IPlaceItemProps> = ({
   const closeMapHandler = () => {
     setShowMap(false);
   };
+
+  console.log(title);
 
   return (
     <>
@@ -45,7 +50,12 @@ const PlaceItem: FC<IPlaceItemProps> = ({
         footer={<Button onClick={closeMapHandler}>CLOSE</Button>}
       >
         <div className="map-container">
-          <h2>the map!</h2>
+          <Map
+            center={[location.lat, location.lng]}
+            markerPos={[location.lat, location.lng]}
+            zoom={16}
+            title={title}
+          />
         </div>
       </Modal>
       <li className="place-item">
