@@ -1,11 +1,15 @@
+import { validate } from "../../../util/validators";
+
 interface IState {
   value: string;
   isValid: boolean;
+  isTouched: boolean;
 }
 
 interface IAction {
   type: string;
   payload?: any;
+  validators?: any;
 }
 const inputReducer = (state: IState, action: IAction): IState => {
   switch (action.type) {
@@ -13,7 +17,13 @@ const inputReducer = (state: IState, action: IAction): IState => {
       return {
         ...state,
         value: action.payload,
-        isValid: true,
+        isValid: validate(action.payload, action.validators),
+      };
+
+    case "TOUCH":
+      return {
+        ...state,
+        isTouched: true,
       };
 
     default:
@@ -21,4 +31,4 @@ const inputReducer = (state: IState, action: IAction): IState => {
   }
 };
 
-export default inputReducer
+export default inputReducer;
