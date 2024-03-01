@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Users from "../user/pages/Users";
 import NotFound from "../shared/pages/NotFound";
-import NewPlaces from "../places/pages/NewPlaces";
+import NewPlaces from "../places/pages/NewPlaces/NewPlaces";
 import RootLayout from "../layout/RootLayout";
 import UserPlaces from "../places/pages/UserPlaces";
 

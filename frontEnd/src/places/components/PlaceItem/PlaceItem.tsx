@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import Card from "../../../shared/components/UIElements/Card/Card";
-import Button from "../../../shared/components/FormElements/Button";
+import Button from "../../../shared/components/FormElements/Button/Button";
 import Modal from "../../../shared/components/UIElements/Modal/Modal";
 import Map from "../../../shared/components/UIElements/Map/Map";
 
@@ -36,8 +36,6 @@ const PlaceItem: FC<IPlaceItemProps> = ({
   const closeMapHandler = () => {
     setShowMap(false);
   };
-
-  console.log(title);
 
   return (
     <>
