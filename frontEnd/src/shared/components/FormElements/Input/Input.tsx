@@ -1,17 +1,18 @@
 import { ChangeEvent, FC, useEffect, useReducer } from "react";
 import "./Input.css";
 import inputReducer from "./inputReducer";
+import { InputName } from "../../../../places/pages/NewPlaces/formReudcer";
 
 interface IInputProps {
   elementProps: string;
-  id: string;
+  id: InputName;
   label: string;
   type?: string;
   placeholder?: string;
   rows?: number;
   errorText?: string;
   validators?: any;
-  onInput: (id: string, value: string, isValid: boolean) => void;
+  onInput: (id: InputName, value: string, isValid: boolean) => void;
 }
 
 const Input: FC<IInputProps> = ({

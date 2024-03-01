@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useReducer } from "react";
 
 import Input from "../../../shared/components/FormElements/Input/Input";
 import {
@@ -7,35 +7,58 @@ import {
 } from "../../../shared/util/validators";
 
 import "./NewPlaces.css";
+import Button from "../../../shared/components/FormElements/Button/Button";
+import formReudcer, { InputName } from "./formReudcer";
+
 const NewPlaces = () => {
-  const titleInputHandler = useCallback(
-    (id: string, value: string, isValid: boolean) => {},
-    []
-  );
-  const descriptionInputHandler = useCallback(
-    (id: string, value: string, isValid: boolean) => {},
-    []
+  const [formState, dispatch] = useReducer(formReudcer, {
+    inputs: {
+      title: {
+        value: "",
+        isValid: false,
+      },
+      description: {
+        value: "",
+        isValid: false,
+      },
+    },
+    isValid: false,
+  });
+
+  const inputHandler = useCallback(
+    (id: InputName, value: string, isValid: boolean) => {
+      dispatch({
+        type: "INPUT_CHANGE",
+        value,
+        isValid,
+        inputId: id,
+      });
+    },
+    [dispatch]
   );
 
   return (
     <form className="place-form">
       <Input
-        id="title"
+        id={InputName.title}
         elementProps="input"
         type="text"
         label="Title"
         validators={[VALIDATOR_REQUIRE()]}
-        onInput={titleInputHandler}
+        onInput={inputHandler}
         errorText="Please enter a valid title"
       />
       <Input
-        id="description"
+        id={InputName.description}
         elementProps="textarea"
         label="Description"
         validators={[VALIDATOR_MINLENGTH(5)]}
-        onInput={descriptionInputHandler}
+        onInput={inputHandler}
         errorText="Please enter a valid description (at least 5 characters)."
       />
+      <Button type="submit" disabled={!formState.isValid}>
+        ADD PLACE
+      </Button>
     </form>
   );
 };
