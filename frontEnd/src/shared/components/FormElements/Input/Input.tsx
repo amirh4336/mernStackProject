@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, useEffect, useReducer } from "react";
 import "./Input.css";
 import inputReducer from "./inputReducer";
-import { InputName } from "../../../../places/pages/NewPlaces/formReudcer";
+import { InputName } from "../../../../places/pages/NewPlaces/formReducer";
 
 interface IInputProps {
   elementProps: string;

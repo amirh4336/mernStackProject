@@ -1,6 +1,7 @@
 export enum InputName {
   title = "title",
   description = "description",
+  address = "address",
 }
 
 interface IState {
@@ -10,6 +11,10 @@ interface IState {
       isValid: boolean;
     };
     [InputName.description]: {
+      value: string;
+      isValid: boolean;
+    };
+    [InputName.address]: {
       value: string;
       isValid: boolean;
     };
@@ -23,7 +28,7 @@ interface IAction {
   inputId: InputName;
 }
 
-const formReudcer = (state: IState, action: IAction) => {
+const formReducer = (state: IState, action: IAction) => {
   switch (action.type) {
     case "INPUT_CHANGE": {
       let formIsValid = true;
@@ -52,4 +57,4 @@ const formReudcer = (state: IState, action: IAction) => {
   }
 };
 
-export default formReudcer;
+export default formReducer;
