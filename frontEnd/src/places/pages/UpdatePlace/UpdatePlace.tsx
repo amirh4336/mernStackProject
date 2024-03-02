@@ -2,13 +2,13 @@ import { useParams } from "react-router-dom";
 import "./UpdatePlace.css";
 import { DUMMY_PLACES } from "../UserPlaces";
 import Input from "../../../shared/components/FormElements/Input/Input";
-import { EditInputs, InputName } from "../../../shared/hooks/formReducer";
+import { EditInputs, InputName } from "../../../shared/hooks/form-hooks/types";
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from "../../../shared/util/validators";
 import Button from "../../../shared/components/FormElements/Button/Button";
-import { useForm } from "../../../shared/hooks/form-hooks";
+import { useForm } from "../../../shared/hooks/form-hooks/form-hooks";
 import { FormEvent, useEffect, useState } from "react";
 import Card from "../../../shared/components/UIElements/Card/Card";
 const UpdatePlace = () => {

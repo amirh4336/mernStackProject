@@ -8,8 +8,8 @@ import {
 
 import "./NewPlaces.css";
 import Button from "../../../shared/components/FormElements/Button/Button";
-import { AddInputs, InputName } from "../../../shared/hooks/formReducer";
-import { useForm } from "../../../shared/hooks/form-hooks";
+import { useForm } from "../../../shared/hooks/form-hooks/form-hooks";
+import { AddInputs, InputName } from "../../../shared/hooks/form-hooks/types";
 
 const NewPlaces = () => {
   const [formState, inputHandler] = useForm<AddInputs>(

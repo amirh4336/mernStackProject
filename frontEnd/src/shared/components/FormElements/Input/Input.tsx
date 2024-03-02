@@ -1,13 +1,13 @@
-import { ChangeEvent, FC, useEffect, useReducer } from "react";
+import { ChangeEvent, FC, HTMLInputTypeAttribute, useEffect, useReducer } from "react";
 import "./Input.css";
 import inputReducer from "./inputReducer";
-import { InputName } from "../../../hooks/formReducer";
+import { InputName } from "../../../hooks/form-hooks/types";
 
 interface IInputProps {
   elementProps: string;
   id: InputName;
   label: string;
-  type?: string;
+  type?: HTMLInputTypeAttribute ;
   placeholder?: string;
   rows?: number;
   errorText?: string;

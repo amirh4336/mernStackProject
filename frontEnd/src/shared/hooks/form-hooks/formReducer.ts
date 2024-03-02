@@ -1,46 +1,15 @@
-type AddInputNames = "title" | "description" | "address";
+import {
+  AddInputNames,
+  AddInputs,
+  AllInputs,
+  AuthInputNames,
+  AuthInputs,
+  EditInputNames,
+  EditInputs,
+  IAction,
+} from "./types";
 
-type EditInputNames = "title" | "description";
-
-export type AddInputs = {
-  [key in AddInputNames]: {
-    value: string;
-    isValid: boolean;
-  };
-};
-
-export type EditInputs = {
-  [key in EditInputNames]: {
-    value: string;
-    isValid: boolean;
-  };
-};
-
-export type AllInputs<T extends AddInputs | EditInputs> = {
-  inputs: T;
-  isValid: boolean;
-};
-
-export enum InputName {
-  title = "title",
-  description = "description",
-  address = "address",
-}
-
-type ActionSetData<T extends AddInputs | EditInputs> = AllInputs<T> & {
-  type: "SET_DATA";
-};
-
-type ActionInputChange = {
-  type: "INPUT_CHANGE";
-  value: string;
-  isValid: boolean;
-  inputId: InputName;
-
-}
-type IAction<T extends AddInputs | EditInputs> = ActionInputChange | ActionSetData<T>
-
-const formReducer = <T extends AddInputs | EditInputs>(
+const formReducer = <T extends AddInputs | EditInputs | AuthInputs>(
   state: AllInputs<T>,
   action: IAction<T>
 ): AllInputs<T> => {
@@ -54,6 +23,9 @@ const formReducer = <T extends AddInputs | EditInputs>(
           if ("address" in state.inputs) {
             formIsValid =
               formIsValid && state.inputs[inputId as AddInputNames].isValid;
+          } else if ("email" in state.inputs) {
+            formIsValid =
+              formIsValid && state.inputs[inputId as AuthInputNames].isValid;
           } else {
             formIsValid =
               formIsValid && state.inputs[inputId as EditInputNames].isValid;
@@ -71,11 +43,11 @@ const formReducer = <T extends AddInputs | EditInputs>(
       };
     }
 
-    case "SET_DATA" : {
+    case "SET_DATA": {
       return {
         inputs: action.inputs,
-        isValid: action.isValid
-      }
+        isValid: action.isValid,
+      };
     }
 
     default:

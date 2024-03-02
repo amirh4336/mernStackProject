@@ -1,20 +1,16 @@
 import { useCallback, useReducer } from "react";
-import formReducer, {
-  AddInputs,
-  AllInputs,
-  EditInputs,
-  InputName,
-} from "./formReducer";
+import { AddInputs, EditInputs, AllInputs, InputName, AuthInputs } from "./types";
+import formReducer from "./formReducer";
 
-export const useForm = <T extends AddInputs | EditInputs>(
+export const useForm = <T extends AddInputs | EditInputs | AuthInputs>(
   initialInputs: T,
   initialFormValidity: boolean
 ): [
-  formState: AllInputs<AddInputs | EditInputs>,
+  formState: AllInputs<AddInputs | EditInputs | AuthInputs>,
   inputHandler: (id: InputName, value: string, isValid: boolean) => void,
   setFormData: (inputData: T, formValidity: boolean) => void
 ] => {
-  const [formState, dispatch ] = useReducer(formReducer, {
+  const [formState, dispatch] = useReducer(formReducer, {
     inputs: initialInputs,
     isValid: initialFormValidity,
   });
