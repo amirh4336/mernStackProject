@@ -20,7 +20,7 @@ const NavLinks = () => {
             <NavLink to="/places/new">ADD PLACE</NavLink>
           </li>
           <li>
-            <a href="#" onClick={logout}>LOGOUT</a>
+            <button onClick={logout}>LOGOUT</button>
           </li>
         </>
       ) : (
