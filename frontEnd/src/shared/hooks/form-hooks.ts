@@ -11,9 +11,10 @@ export const useForm = <T extends AddInputs | EditInputs>(
   initialFormValidity: boolean
 ): [
   formState: AllInputs<AddInputs | EditInputs>,
-  (id: InputName, value: string, isValid: boolean) => void
+  inputHandler: (id: InputName, value: string, isValid: boolean) => void,
+  setFormData: (inputData: T, formValidity: boolean) => void
 ] => {
-  const [formState, dispatch] = useReducer(formReducer, {
+  const [formState, dispatch ] = useReducer(formReducer, {
     inputs: initialInputs,
     isValid: initialFormValidity,
   });
@@ -30,5 +31,9 @@ export const useForm = <T extends AddInputs | EditInputs>(
     [dispatch]
   );
 
-  return [formState, inputHandler];
+  const setFormData = useCallback((inputData: T, formValidity: boolean) => {
+    dispatch({ type: "SET_DATA", inputs: inputData, isValid: formValidity });
+  }, []);
+
+  return [formState, inputHandler, setFormData];
 };

@@ -1,3 +1,7 @@
+type AddInputNames = "title" | "description" | "address";
+
+type EditInputNames = "title" | "description";
+
 export type AddInputs = {
   [key in AddInputNames]: {
     value: string;
@@ -17,25 +21,28 @@ export type AllInputs<T extends AddInputs | EditInputs> = {
   isValid: boolean;
 };
 
-type AddInputNames = "title" | "description" | "address";
-
-type EditInputNames = "title" | "description";
-
 export enum InputName {
   title = "title",
   description = "description",
   address = "address",
 }
-interface IAction {
-  type: string;
+
+type ActionSetData<T extends AddInputs | EditInputs> = AllInputs<T> & {
+  type: "SET_DATA";
+};
+
+type ActionInputChange = {
+  type: "INPUT_CHANGE";
   value: string;
   isValid: boolean;
   inputId: InputName;
+
 }
+type IAction<T extends AddInputs | EditInputs> = ActionInputChange | ActionSetData<T>
 
 const formReducer = <T extends AddInputs | EditInputs>(
   state: AllInputs<T>,
-  action: IAction
+  action: IAction<T>
 ): AllInputs<T> => {
   switch (action.type) {
     case "INPUT_CHANGE": {
@@ -62,6 +69,13 @@ const formReducer = <T extends AddInputs | EditInputs>(
         },
         isValid: formIsValid,
       };
+    }
+
+    case "SET_DATA" : {
+      return {
+        inputs: action.inputs,
+        isValid: action.isValid
+      }
     }
 
     default:
