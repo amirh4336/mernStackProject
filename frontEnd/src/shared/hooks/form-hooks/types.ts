@@ -2,7 +2,7 @@ export type AddInputNames = "title" | "description" | "address";
 
 export type EditInputNames = "title" | "description";
 
-export type AuthInputNames = "email" | "password";
+export type AuthInputNames = "email" | "password" | 'name';
 
 export type AddInputs = {
   [key in AddInputNames]: {
@@ -18,10 +18,18 @@ export type EditInputs = {
   };
 };
 export type AuthInputs = {
-  [key in AuthInputNames]: {
+  name?:{
     value: string;
     isValid: boolean;
-  };
+  },
+  email:{
+    value: string;
+    isValid: boolean;
+  },
+  password:{
+    value: string;
+    isValid: boolean;
+  },
 };
 
 export type AllInputs<T extends AddInputs | EditInputs | AuthInputs> = {
@@ -35,6 +43,7 @@ export enum InputName {
   address = "address",
   email = "email",
   password = "password",
+  name = "name"
 }
 
 export type ActionSetData<T extends AddInputs | EditInputs | AuthInputs> = AllInputs<T> & {
