@@ -1,10 +1,11 @@
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import Card from "../../../shared/components/UIElements/Card/Card";
 import Button from "../../../shared/components/FormElements/Button/Button";
 import Modal from "../../../shared/components/UIElements/Modal/Modal";
 import Map from "../../../shared/components/UIElements/Map/Map";
 
 import "./PlaceItem.css";
+import { AuthContext } from "../../../shared/context/auth-context";
 
 export interface IPlaceItemProps {
   id: string;
@@ -27,6 +28,8 @@ const PlaceItem: FC<IPlaceItemProps> = ({
   description,
   location,
 }) => {
+  const { isLoggedIn } = useContext(AuthContext);
+
   const [showMap, setShowMap] = useState(false);
 
   const [showConfirimModal, setShowConfirmModal] = useState(false);
@@ -106,10 +109,14 @@ const PlaceItem: FC<IPlaceItemProps> = ({
             <Button inverse onClick={openMapHandler}>
               View on map
             </Button>
-            <Button to={`/places/${id}`}>Edit</Button>
-            <Button danger onClick={showDeleteWarningHandler}>
-              Delete
-            </Button>
+            {isLoggedIn && (
+              <>
+                <Button to={`/places/${id}`}>Edit</Button>
+                <Button danger onClick={showDeleteWarningHandler}>
+                  Delete
+                </Button>
+              </>
+            )}
           </div>
         </Card>
       </li>
