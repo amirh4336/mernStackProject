@@ -10,8 +10,9 @@ import {
 import Button from "../../../shared/components/FormElements/Button/Button";
 import { useForm } from "../../../shared/hooks/form-hooks";
 import { FormEvent, useEffect, useState } from "react";
+import Card from "../../../shared/components/UIElements/Card/Card";
 const UpdatePlace = () => {
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
   const placeId = useParams().placeId;
 
   const [{ inputs, isValid }, inputHandler, setFormData] = useForm<EditInputs>(
@@ -31,20 +32,22 @@ const UpdatePlace = () => {
   const identifedPlace = DUMMY_PLACES.find((p) => p.id === placeId);
 
   useEffect(() => {
-    setFormData(
-      {
-        title: {
-          value: identifedPlace?.title || "",
-          isValid: true,
+    if (identifedPlace) {
+      setFormData(
+        {
+          title: {
+            value: identifedPlace?.title || "",
+            isValid: true,
+          },
+          description: {
+            value: identifedPlace?.description || "",
+            isValid: true,
+          },
         },
-        description: {
-          value: identifedPlace?.description || "",
-          isValid: true,
-        },
-      },
-      true
-    );
-    setIsLoading(false)
+        true
+      );
+    }
+    setIsLoading(false);
   }, [setFormData, identifedPlace]);
 
   const updatePlaceSubmitHandler = (event: FormEvent<HTMLFormElement>) => {
@@ -55,7 +58,9 @@ const UpdatePlace = () => {
   if (!identifedPlace) {
     return (
       <div className="center">
-        <h2>Could not find place!</h2>
+        <Card>
+          <h2>Could not find place!</h2>
+        </Card>
       </div>
     );
   }

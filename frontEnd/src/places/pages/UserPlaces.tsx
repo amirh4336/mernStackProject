@@ -16,7 +16,7 @@ export const DUMMY_PLACES = [
   },
   {
     id: "p2",
-    title: "Empire State Building",
+    title: "Emp State Building",
     description: "One of the most famous sky scrapers in the world!",
     imageUrl: "https://cdn.zoomg.ir/2020/11/the-last-of-us-tv-series-1.jpg",
     address: "20 W 34th St, New York, NY 10001",
