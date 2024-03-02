@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import Button from "../../../shared/components/FormElements/Button/Button";
 import Input from "../../../shared/components/FormElements/Input/Input";
 import { useForm } from "../../../shared/hooks/form-hooks/form-hooks";
@@ -11,7 +11,11 @@ import {
 
 import "./Auth.css";
 import Card from "../../../shared/components/UIElements/Card/Card";
+import { AuthContext } from "../../../shared/context/auth-context";
+import { Navigate } from "react-router-dom";
 const Auth = () => {
+
+  const {isLoggedIn ,login } = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
 
   const [{ inputs, isValid }, inputHandler, setFormData] = useForm<AuthInputs>(
@@ -31,6 +35,7 @@ const Auth = () => {
   const authSubmitHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log(inputs);
+    login();
   };
 
   const switchModeHandler = () => {
@@ -56,6 +61,10 @@ const Auth = () => {
     }
     setIsLoginMode((prevMode) => !prevMode);
   };
+
+  if (isLoggedIn) {
+    return <Navigate to="/" replace={true} />
+  }
 
   return (
     <Card className="authentication">

@@ -13,7 +13,6 @@ function App() {
   const logout = useCallback(() => {
     setIsLoggedIn(false);
   }, []);
-
   return (
     <AuthContext.Provider value={{ isLoggedIn: isLoggedIn, logout, login }}>
       <RouterProvider router={router} />
