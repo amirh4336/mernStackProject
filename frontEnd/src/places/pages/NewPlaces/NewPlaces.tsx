@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useReducer } from "react";
+import { FormEvent } from "react";
 
 import Input from "../../../shared/components/FormElements/Input/Input";
 import {
@@ -8,11 +8,12 @@ import {
 
 import "./NewPlaces.css";
 import Button from "../../../shared/components/FormElements/Button/Button";
-import formReducer, { InputName } from "./formReducer";
+import { AddInputs, InputName } from "../../../shared/hooks/formReducer";
+import { useForm } from "../../../shared/hooks/form-hooks";
 
 const NewPlaces = () => {
-  const [formState, dispatch] = useReducer(formReducer, {
-    inputs: {
+  const [formState, inputHandler] = useForm<AddInputs>(
+    {
       title: {
         value: "",
         isValid: false,
@@ -26,19 +27,7 @@ const NewPlaces = () => {
         isValid: false,
       },
     },
-    isValid: false,
-  });
-
-  const inputHandler = useCallback(
-    (id: InputName, value: string, isValid: boolean) => {
-      dispatch({
-        type: "INPUT_CHANGE",
-        value,
-        isValid,
-        inputId: id,
-      });
-    },
-    [dispatch]
+    false
   );
 
   const placeSubmitHandler = (event: FormEvent<HTMLFormElement>) => {

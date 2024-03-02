@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, useEffect, useReducer } from "react";
 import "./Input.css";
 import inputReducer from "./inputReducer";
-import { InputName } from "../../../../places/pages/NewPlaces/formReducer";
+import { InputName } from "../../../hooks/formReducer";
 
 interface IInputProps {
   elementProps: string;
@@ -13,6 +13,8 @@ interface IInputProps {
   errorText?: string;
   validators?: any;
   onInput: (id: InputName, value: string, isValid: boolean) => void;
+  initialValue?: string;
+  initialValid?: boolean;
 }
 
 const Input: FC<IInputProps> = ({
@@ -25,11 +27,13 @@ const Input: FC<IInputProps> = ({
   errorText = "something went wrong !",
   validators,
   onInput,
+  initialValue,
+  initialValid,
 }) => {
   const [{ value, isValid, isTouched }, dispatch] = useReducer(inputReducer, {
-    value: "",
-    isValid: false,
+    value: initialValue || "",
     isTouched: false,
+    isValid: initialValid || false,
   });
 
   const changeHandler = (
