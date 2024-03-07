@@ -1,32 +1,48 @@
 const { v4: uuidv4 } = require("uuid");
 
-// const HttpError = require("../models/http-errors");
+const HttpError = require("../models/http-errors");
 
 let DUMMY_USERS = [
   {
-    userName: "u1",
+    id: "u1",
+    name: "amir",
     email: "addres.dsfa",
     password: "1234",
   },
 ];
 
-const getAllUsers = (req, res, next) => {
-  res.status(200).json({ users: DUMMY_USERS });
+const getUsers = (req, res, next) => {
+  res.json({ users: DUMMY_USERS });
 };
 const signup = (req, res, next) => {
-  const { userName, email, password } = req.body;
+  const { name, email, password } = req.body;
 
-  const createUser = {
+  const createdUser = {
     id: uuidv4(),
-    userName,
+    name,
     email,
     password,
   };
 
-  DUMMY_USERS.push(createUser);
+  DUMMY_USERS.push(createdUser);
 
-  res.status(201).json({ user: createUser });
+  res.status(201).json({ user: createdUser });
 };
 
-exports.getAllUsers = getAllUsers;
+const login = (req, res, next) => {
+  const { email, password } = req.body;
+
+  const identifiedUser = DUMMY_USERS.find(u => u.email === email)
+
+  if (!identifiedUser || identifiedUser.password !== password) {
+    return next(
+      new HttpError("Could not find identify user ,credentials seem to be wrong.", 401)
+    );
+  }
+
+  res.json({message: "Logged in"})
+};
+
+exports.getUsers = getUsers;
 exports.signup = signup;
+exports.login = login;
