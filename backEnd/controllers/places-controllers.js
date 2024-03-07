@@ -2,7 +2,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const HttpError = require("../models/http-errors");
 
-let DUMMY_PLACES = [
+const DUMMY_PLACES = [
   {
     id: "p1",
     title: "Empire State Building",
@@ -78,42 +78,20 @@ const createPlace = (req, res, next) => {
 const updatePlace = (req, res, next) => {
   const placeId = req.params.pid;
 
-  const { title, description, coordinates, address, creator } = req.body;
+  const { title, description } = req.body;
 
-  let place = DUMMY_PLACES.find((p) => p.id === placeId);
+  const updatePlace = { ...DUMMY_PLACES.find((p) => p.id === placeId) };
+  const placeIndex = DUMMY_PLACES.findIndex((p) => p.id === placeId);
+  updatePlace.title = title;
+  updatePlace.description = description;
 
-  if (!place) {
-    return next(
-      new HttpError("Could not find a place for the provided id.", 404)
-    );
-  }
 
-  const tempArray = DUMMY_PLACES.map((p) => {
-    if (p.id === placeId) {
-      const temp = {
-        id: p.id,
-        title: title || p.title,
-        description: description || p.description,
-        coordinates: coordinates || p.coordinates,
-        address: address || p.address,
-        creator: creator || p.creator,
-      };
+  DUMMY_PLACES[placeIndex] = updatePlace
 
-      place = temp;
-
-      return temp;
-    }
-    return p;
-  });
-
-  DUMMY_PLACES = [...tempArray];
-
-  res.status(201).json({ place });
+  res.status(200).json({ place: updatePlace });
 };
 
-
-const deletePlaceById = (req , res , next ) => {
-
+const deletePlace = (req, res, next) => {
   const placeId = req.params.pid;
 
   let place = DUMMY_PLACES.find((p) => p.id === placeId);
@@ -124,15 +102,15 @@ const deletePlaceById = (req , res , next ) => {
     );
   }
 
-  const tempArray = DUMMY_PLACES.filter((p) => p.id !== placeId)
+  const tempArray = DUMMY_PLACES.filter((p) => p.id !== placeId);
 
   DUMMY_PLACES = [...tempArray];
 
-  res.status(200).json({ message: "place success fully deleted" ,place });
-}
+  res.status(200).json({ message: "place success fully deleted", place });
+};
 
 exports.getPlaceById = getPlaceById;
 exports.getPlaceByUserId = getPlaceByUserId;
 exports.createPlace = createPlace;
 exports.updatePlace = updatePlace;
-exports.deletePlaceById = deletePlaceById;
+exports.deletePlace = deletePlace;
