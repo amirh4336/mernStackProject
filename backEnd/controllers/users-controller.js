@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
-
+const { validationResult } = require("express-validator");
 const HttpError = require("../models/http-errors");
 
 let DUMMY_USERS = [
@@ -15,9 +15,15 @@ const getUsers = (req, res, next) => {
   res.json({ users: DUMMY_USERS });
 };
 const signup = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log(errors);
+    throw new HttpError("Invalid inputs passed, please check your data", 422);
+  }
+
   const { name, email, password } = req.body;
 
-  const hasUser = DUMMY_USERS.find(u => u.email === email)
+  const hasUser = DUMMY_USERS.find((u) => u.email === email);
 
   if (hasUser) {
     return next(
@@ -38,17 +44,26 @@ const signup = (req, res, next) => {
 };
 
 const login = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log(errors);
+    throw new HttpError("Invalid inputs passed, please check your data", 422);
+  }
+
   const { email, password } = req.body;
 
-  const identifiedUser = DUMMY_USERS.find(u => u.email === email)
+  const identifiedUser = DUMMY_USERS.find((u) => u.email === email);
 
   if (!identifiedUser || identifiedUser.password !== password) {
     return next(
-      new HttpError("Could not find identify user ,credentials seem to be wrong.", 401)
+      new HttpError(
+        "Could not find identify user ,credentials seem to be wrong.",
+        401
+      )
     );
   }
 
-  res.json({message: "Logged in"})
+  res.json({ message: "Logged in" });
 };
 
 exports.getUsers = getUsers;
