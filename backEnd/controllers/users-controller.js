@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
 const HttpError = require("../models/http-errors");
 const User = require("../models/user");
@@ -49,7 +48,7 @@ const signup = async (req, res, next) => {
     email,
     image: "https://cdn.zoomg.ir/2024/3/silent-hill-2-main-character.jpg",
     password,
-    places,
+    places : 'test',
   });
 
   try {
@@ -62,23 +61,29 @@ const signup = async (req, res, next) => {
   res.status(201).json({ user: createdUser.toObject({ getters: true }) });
 };
 
-const login = (req, res, next) => {
+const login = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log(errors);
-    throw new HttpError("Invalid inputs passed, please check your data", 422);
+    next( new HttpError("Invalid inputs passed, please check your data", 422));
   }
 
   const { email, password } = req.body;
 
-  const identifiedUser = DUMMY_USERS.find((u) => u.email === email);
+  let existsingUser;
 
-  if (!identifiedUser || identifiedUser.password !== password) {
+  try {
+    existsingUser = await User.findOne({ email });
+  } catch {
+    const error = new HttpError(
+      "logging in failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+  if (!existsingUser || existsingUser.password !== password) {
     return next(
-      new HttpError(
-        "Could not find identify user ,credentials seem to be wrong.",
-        401
-      )
+      new HttpError("Invalid credntials, could not log you in", 401)
     );
   }
 
