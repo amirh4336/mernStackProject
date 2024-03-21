@@ -11,8 +11,18 @@ let DUMMY_USERS = [
   },
 ];
 
-const getUsers = (req, res, next) => {
-  res.json({ users: DUMMY_USERS });
+const getUsers = async (req, res, next) => {
+  let users;
+  try {
+    users = await User.find({}, "-password");
+  } catch {
+    const error = new HttpError(
+      "Fetching users failed , please try again later.",
+      500
+    );
+    return next(error);
+  }
+  res.json({ users: users.map((user) => user.toObject({ getters: true })) });
 };
 const signup = async (req, res, next) => {
   const errors = validationResult(req);
@@ -48,7 +58,7 @@ const signup = async (req, res, next) => {
     email,
     image: "https://cdn.zoomg.ir/2024/3/silent-hill-2-main-character.jpg",
     password,
-    places : 'test',
+    places: "test",
   });
 
   try {
@@ -65,7 +75,7 @@ const login = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log(errors);
-    next( new HttpError("Invalid inputs passed, please check your data", 422));
+    next(new HttpError("Invalid inputs passed, please check your data", 422));
   }
 
   const { email, password } = req.body;
@@ -82,9 +92,7 @@ const login = async (req, res, next) => {
     return next(error);
   }
   if (!existsingUser || existsingUser.password !== password) {
-    return next(
-      new HttpError("Invalid credntials, could not log you in", 401)
-    );
+    return next(new HttpError("Invalid credntials, could not log you in", 401));
   }
 
   res.json({ message: "Logged in" });
