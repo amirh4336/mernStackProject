@@ -2,15 +2,6 @@ const { validationResult } = require("express-validator");
 const HttpError = require("../models/http-errors");
 const User = require("../models/user");
 
-let DUMMY_USERS = [
-  {
-    id: "u1",
-    name: "amir",
-    email: "addres.dsfa",
-    password: "1234",
-  },
-];
-
 const getUsers = async (req, res, next) => {
   let users;
   try {
@@ -58,7 +49,7 @@ const signup = async (req, res, next) => {
     email,
     image: "https://cdn.zoomg.ir/2024/3/silent-hill-2-main-character.jpg",
     password,
-    places: "test",
+    places: [],
   });
 
   try {
