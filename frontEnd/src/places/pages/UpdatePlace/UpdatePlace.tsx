@@ -42,7 +42,6 @@ const UpdatePlace = () => {
         const resData = await sendRequest({
           url: `http://localhost:5000/api/places/${placeId}`,
         });
-        console.log(resData);
         setIdentifedPlace(resData.place);
         setFormData(
           {

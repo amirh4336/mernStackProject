@@ -9,7 +9,7 @@ import { AuthContext } from "../../../shared/context/auth-context";
 
 export interface IPlaceItemProps {
   id: string;
-  imageUrl: string;
+  image: string;
   title: string;
   description: string;
   address: string;
@@ -22,7 +22,7 @@ export interface IPlaceItemProps {
 
 const PlaceItem: FC<IPlaceItemProps> = ({
   id,
-  imageUrl,
+  image,
   title,
   address,
   description,
@@ -98,7 +98,7 @@ const PlaceItem: FC<IPlaceItemProps> = ({
       <li className="place-item">
         <Card className="place-item__content">
           <div className="palce-item__image">
-            <img src={imageUrl} alt={title} height={200} width="100%" />
+            <img src={image} alt={title} height={200} width="100%" />
           </div>
           <div className="place-item__info">
             <h2>{title}</h2>
