@@ -14,8 +14,7 @@ import Card from "../../../shared/components/UIElements/Card/Card";
 import { AuthContext } from "../../../shared/context/auth-context";
 import { Navigate } from "react-router-dom";
 const Auth = () => {
-
-  const {isLoggedIn ,login } = useContext(AuthContext);
+  const { isLoggedIn, login } = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
 
   const [{ inputs, isValid }, inputHandler, setFormData] = useForm<AuthInputs>(
@@ -32,10 +31,36 @@ const Auth = () => {
     false
   );
 
-  const authSubmitHandler = (event: FormEvent<HTMLFormElement>) => {
+  const authSubmitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(inputs);
-    login();
+    try {
+      let response;
+      if (isLoginMode) {
+        response = await fetch("http://localhost:5000/api/users/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: inputs.email.value,
+            password: inputs.password.value,
+          }),
+        });
+      } else {
+        response = await fetch("http://localhost:5000/api/users/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: inputs.name?.value,
+            email: inputs.email.value,
+            password: inputs.password.value,
+          }),
+        });
+      }
+      const responseData = await response.json()
+      console.log(responseData);
+      login();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const switchModeHandler = () => {
@@ -63,7 +88,7 @@ const Auth = () => {
   };
 
   if (isLoggedIn) {
-    return <Navigate to="/" replace={true} />
+    return <Navigate to="/" replace={true} />;
   }
 
   return (
