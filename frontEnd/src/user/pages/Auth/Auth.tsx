@@ -13,6 +13,8 @@ import "./Auth.css";
 import Card from "../../../shared/components/UIElements/Card/Card";
 import { AuthContext } from "../../../shared/context/auth-context";
 import { Navigate } from "react-router-dom";
+import LoadingSpinner from "../../../shared/components/UIElements/LoadingSpinner/LoadingSpinner";
+import ErrorModal from "../../../shared/components/UIElements/ErrorModal/ErrorModal";
 const Auth = () => {
   const { isLoggedIn, login } = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -59,6 +61,9 @@ const Auth = () => {
         });
       }
       const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.message);
+      }
       console.log(responseData);
       login();
     } catch (error: any) {
@@ -98,47 +103,53 @@ const Auth = () => {
   }
 
   return (
-    <Card className="authentication">
-      <h2>Login Required</h2>
-      <hr />
-      <form onSubmit={authSubmitHandler}>
-        {!isLoginMode && (
+    <>
+      {error && (
+        <ErrorModal error={error} onClear={() => setError(undefined)} />
+      )}
+      <Card className="authentication">
+        {isLoading && <LoadingSpinner asOverlay />}
+        <h2>Login Required</h2>
+        <hr />
+        <form onSubmit={authSubmitHandler}>
+          {!isLoginMode && (
+            <Input
+              id={InputName.name}
+              elementProps="input"
+              type="text"
+              label="Your Name"
+              validators={[VALIDATOR_REQUIRE()]}
+              onInput={inputHandler}
+              errorText="Please enter a name"
+            />
+          )}
           <Input
-            id={InputName.name}
+            id={InputName.email}
             elementProps="input"
             type="text"
-            label="Your Name"
-            validators={[VALIDATOR_REQUIRE()]}
+            label="Email"
+            validators={[VALIDATOR_EMAIL()]}
             onInput={inputHandler}
-            errorText="Please enter a name"
+            errorText="Please enter a valid email address"
           />
-        )}
-        <Input
-          id={InputName.email}
-          elementProps="input"
-          type="text"
-          label="Email"
-          validators={[VALIDATOR_EMAIL()]}
-          onInput={inputHandler}
-          errorText="Please enter a valid email address"
-        />
-        <Input
-          id={InputName.password}
-          elementProps="input"
-          type="password"
-          label="Password"
-          validators={[VALIDATOR_MINLENGTH(5)]}
-          onInput={inputHandler}
-          errorText="Please enter a valid password  (at least 5 characters)"
-        />
-        <Button type="submit" disabled={!isValid}>
-          {isLoginMode ? "LOGIN" : "SIGNUP"}
+          <Input
+            id={InputName.password}
+            elementProps="input"
+            type="password"
+            label="Password"
+            validators={[VALIDATOR_MINLENGTH(5)]}
+            onInput={inputHandler}
+            errorText="Please enter a valid password  (at least 5 characters)"
+          />
+          <Button type="submit" disabled={!isValid}>
+            {isLoginMode ? "LOGIN" : "SIGNUP"}
+          </Button>
+        </form>
+        <Button inverse onClick={switchModeHandler}>
+          SWITCH TO {!isLoginMode ? "LOGIN" : "SIGNUP"}
         </Button>
-      </form>
-      <Button inverse onClick={switchModeHandler}>
-        SWITCH TO {!isLoginMode ? "LOGIN" : "SIGNUP"}
-      </Button>
-    </Card>
+      </Card>
+    </>
   );
 };
 
