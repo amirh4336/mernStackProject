@@ -28,11 +28,13 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect("mongodb://root:0gWQjcVpoDD4Z4No0mCIMhrz@denali.liara.cloud:34221/my-app?authSource=admin")
+  .connect(
+    "mongodb://root:brNuxrnv8olXFOY3fdfYak7T@denali.liara.cloud:34346/my-app?authSource=admin&replicaSet=rs0&directConnection=true"
+  )
   .then(() => {
     app.listen(5000);
     console.log("server started on port 5000");
   })
   .catch((err) => {
-    console.log("we have module error :", err)
+    console.log("we have module error :", err);
   });

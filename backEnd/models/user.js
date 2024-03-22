@@ -23,7 +23,7 @@ const usersSchema = new Schema({
   },
   places: [
     {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "Place",
     },
