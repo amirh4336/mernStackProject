@@ -18,23 +18,26 @@ export const useHttpClient = () => {
       headers: HeadersInit | undefined;
     }) => {
       setIsLoading(true);
-      const httpAbortCtrll = new AbortController()
-      activeHttpRequests.current.push(httpAbortCtrll)
+      const httpAbortCtrl = new AbortController()
+      activeHttpRequests.current.push(httpAbortCtrl)
       try {
         const res = await fetch(url, {
           method,
           body,
           headers,
-          signal: httpAbortCtrll.signal
+          signal: httpAbortCtrl.signal
         });
 
         const responseData = await res.json();
+
+        activeHttpRequests.current = activeHttpRequests.current.filter((reqCtrl: any) => reqCtrl !== httpAbortCtrl)
         if (!res.ok) {
           throw new Error(responseData.message);
         }
         return responseData;
       } catch (error: any) {
         setError(error.message || "Something went wrong, please try again");
+        throw error;
       } finally {
         setIsLoading(false);
       }
