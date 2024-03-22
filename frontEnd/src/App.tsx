@@ -6,15 +6,18 @@ import { useCallback, useState } from "react";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userId, setUserId] = useState<string| null>(null);
 
-  const login = useCallback(() => {
+  const login = useCallback((uid: string) => {
     setIsLoggedIn(true);
+    setUserId(uid)
   }, []);
   const logout = useCallback(() => {
     setIsLoggedIn(false);
+    setUserId(null)
   }, []);
   return (
-    <AuthContext.Provider value={{ isLoggedIn: isLoggedIn, logout, login }}>
+    <AuthContext.Provider value={{ isLoggedIn: isLoggedIn , userId: userId, logout, login }}>
       <RouterProvider router={router} />
     </AuthContext.Provider>
   );

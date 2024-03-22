@@ -37,8 +37,9 @@ const Auth = () => {
   const authSubmitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
+      let resData;
       if (isLoginMode) {
-        await sendRequest({
+        resData = await sendRequest({
           url: "http://localhost:5000/api/users/login",
           method: "POST",
           body: JSON.stringify({
@@ -48,19 +49,22 @@ const Auth = () => {
           headers: { "Content-Type": "application/json" },
         });
       } else {
-        await sendRequest({
+        resData = await sendRequest({
           url: "http://localhost:5000/api/users/signup",
           method: "POST",
           body: JSON.stringify({
+            name: inputs.name?.value,
             email: inputs.email.value,
             password: inputs.password.value,
           }),
           headers: { "Content-Type": "application/json" },
         });
       }
-      
-      login();
-    } catch (err) {console.log(err);}
+
+      login(resData.user.id);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const switchModeHandler = () => {
