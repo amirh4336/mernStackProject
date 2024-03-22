@@ -16,6 +16,8 @@ import { Navigate } from "react-router-dom";
 const Auth = () => {
   const { isLoggedIn, login } = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>();
 
   const [{ inputs, isValid }, inputHandler, setFormData] = useForm<AuthInputs>(
     {
@@ -34,6 +36,7 @@ const Auth = () => {
   const authSubmitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
+      setIsLoading(true);
       let response;
       if (isLoginMode) {
         response = await fetch("http://localhost:5000/api/users/login", {
@@ -55,11 +58,14 @@ const Auth = () => {
           }),
         });
       }
-      const responseData = await response.json()
+      const responseData = await response.json();
       console.log(responseData);
       login();
-    } catch (error) {
+    } catch (error: any) {
+      setError(error?.message || "Something went wrong, please try again");
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
