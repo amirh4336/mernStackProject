@@ -1,9 +1,9 @@
-import { useState, useCallback, useRef ,useEffect } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 
 export const useHttpClient = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const  activeHttpRequests = useRef<any>([])
+  const activeHttpRequests = useRef<any>([]);
 
   const sendRequest = useCallback(
     async ({
@@ -13,24 +13,26 @@ export const useHttpClient = () => {
       headers = {},
     }: {
       url: string;
-      method: string;
-      body: BodyInit | null | undefined;
-      headers: HeadersInit | undefined;
+      method?: string;
+      body?: BodyInit | null;
+      headers?: HeadersInit;
     }) => {
       setIsLoading(true);
-      const httpAbortCtrl = new AbortController()
-      activeHttpRequests.current.push(httpAbortCtrl)
+      const httpAbortCtrl = new AbortController();
+      activeHttpRequests.current.push(httpAbortCtrl);
       try {
         const res = await fetch(url, {
           method,
           body,
           headers,
-          signal: httpAbortCtrl.signal
+          signal: httpAbortCtrl.signal,
         });
 
         const responseData = await res.json();
 
-        activeHttpRequests.current = activeHttpRequests.current.filter((reqCtrl: any) => reqCtrl !== httpAbortCtrl)
+        activeHttpRequests.current = activeHttpRequests.current.filter(
+          (reqCtrl: any) => reqCtrl !== httpAbortCtrl
+        );
         if (!res.ok) {
           throw new Error(responseData.message);
         }
@@ -47,15 +49,13 @@ export const useHttpClient = () => {
 
   const clearError = () => {
     setError(undefined);
-  }
+  };
 
   useEffect(() => {
-
     return () => {
-      activeHttpRequests.current.forEach((abortCtrl : any )=> abortCtrl.abort())
-    }
-  }, [])
-  
+      activeHttpRequests.current.forEach((abortCtrl: any) => abortCtrl.abort());
+    };
+  }, []);
 
-  return { isLoading, error, sendRequest , clearError };
+  return { isLoading, error, sendRequest, clearError };
 };
