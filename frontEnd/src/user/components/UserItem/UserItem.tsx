@@ -8,7 +8,7 @@ export interface IUserItemProps {
   id: string;
   image: string;
   name: string;
-  places: number;
+  places: string[];
 }
 
 const UserItem: FC<IUserItemProps> = ({ id, image, name, places }) => {
@@ -22,7 +22,7 @@ const UserItem: FC<IUserItemProps> = ({ id, image, name, places }) => {
           <div className="user-item__info">
             <h2>{name}</h2>
             <h3>
-              {places} {places === 1 ? "Place" : "Places"}
+              {places.length} {places.length === 1 ? "Place" : "Places"}
             </h3>
           </div>
         </Link>

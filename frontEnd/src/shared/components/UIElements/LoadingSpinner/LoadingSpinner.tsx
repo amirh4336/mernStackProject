@@ -2,7 +2,7 @@ import { FC } from "react";
 import "./LoadingSpinner.css";
 
 interface ILoadingSpinnerProps {
-  asOverlay: boolean;
+  asOverlay?: boolean;
 }
 
 const LoadingSpinner: FC<ILoadingSpinnerProps> = (props) => {

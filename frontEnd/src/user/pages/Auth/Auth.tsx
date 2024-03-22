@@ -64,11 +64,9 @@ const Auth = () => {
       if (!response.ok) {
         throw new Error(responseData.message);
       }
-      console.log(responseData);
       login();
     } catch (error: any) {
       setError(error?.message || "Something went wrong, please try again");
-      console.log(error);
     } finally {
       setIsLoading(false);
     }
