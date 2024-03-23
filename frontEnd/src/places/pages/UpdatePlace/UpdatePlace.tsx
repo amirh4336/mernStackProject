@@ -42,7 +42,7 @@ const UpdatePlace = () => {
     const sendHandler = async () => {
       try {
         const resData = await sendRequest({
-          url: `http://localhost:5000/api/places/${placeId}`,
+          url: `${import.meta.env.VITE_BACKEND_URL}/places/${placeId}`,
           headers: {
             "Content-Type": "application/json",
           },
@@ -74,7 +74,7 @@ const UpdatePlace = () => {
     event.preventDefault();
     try {
       await sendRequest({
-        url: `http://localhost:5000/api/places/${placeId}`,
+        url: `${import.meta.env.VITE_BACKEND_URL}/places/${placeId}`,
         method: "PATCH",
         body: JSON.stringify({
           title: inputs.title.value,

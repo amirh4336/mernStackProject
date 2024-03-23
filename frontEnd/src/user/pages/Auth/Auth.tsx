@@ -41,7 +41,7 @@ const Auth = () => {
       let resData;
       if (isLoginMode) {
         resData = await sendRequest({
-          url: "http://localhost:5000/api/users/login",
+          url: `${import.meta.env.VITE_BACKEND_URL}/users/login`,
           method: "POST",
           body: JSON.stringify({
             email: inputs.email.value,
@@ -56,13 +56,13 @@ const Auth = () => {
         formData.append("password", inputs.password.value);
         formData.append("image", inputs.image?.value ?? "");
         resData = await sendRequest({
-          url: "http://localhost:5000/api/users/signup",
+          url: `${import.meta.env.VITE_BACKEND_URL}/users/signup`,
           method: "POST",
           body: formData,
         });
       }
 
-      login(resData.userId , resData.token);
+      login(resData.userId, resData.token);
     } catch (err) {
       console.log(err);
     }

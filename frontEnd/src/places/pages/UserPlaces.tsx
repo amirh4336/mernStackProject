@@ -16,7 +16,7 @@ const UserPlaces = () => {
     const sendHandler = async () => {
       try {
         const resData = await sendRequest({
-          url: `http://localhost:5000/api/places/user/${userId}`,
+          url: `${import.meta.env.VITE_BACKEND_URL}/places/user/${userId}`,
         });
 
         setLoadedPlaces(resData.places);

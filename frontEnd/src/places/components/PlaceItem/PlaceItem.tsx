@@ -29,7 +29,7 @@ export interface IPlaceItemProps {
 const PlaceItem: FC<IPlaceItemProps> = ({ item, onDelete }) => {
   const { id, image, title, address, description, location, creator } = item;
 
-  const { isLoggedIn, userId , token } = useContext(AuthContext);
+  const { isLoggedIn, userId, token } = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [showMap, setShowMap] = useState(false);
 
@@ -54,7 +54,7 @@ const PlaceItem: FC<IPlaceItemProps> = ({ item, onDelete }) => {
   const confirmDeleteHandler = async () => {
     try {
       await sendRequest({
-        url: `http://localhost:5000/api/places/${id}`,
+        url: `${import.meta.env.VITE_BACKEND_URL}/places/${id}`,
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -112,7 +112,7 @@ const PlaceItem: FC<IPlaceItemProps> = ({ item, onDelete }) => {
         <Card className="place-item__content">
           <div className="palce-item__image">
             <img
-              src={`http://localhost:5000/${image}`}
+              src={`${import.meta.env.VITE_BACKEND_ASSET}/${image}`}
               alt={title}
               height={200}
               width="100%"

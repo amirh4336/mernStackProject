@@ -12,7 +12,7 @@ const Users = () => {
     const sendHandler = async () => {
       try {
         const resData = await sendRequest({
-          url: "http://localhost:5000/api/users",
+          url: `${import.meta.env.VITE_BACKEND_URL}/users`,
         });
 
         setUsers(resData.users);
