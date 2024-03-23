@@ -50,15 +50,15 @@ const Auth = () => {
           headers: { "Content-Type": "application/json" },
         });
       } else {
+        const formData = new FormData();
+        formData.append("name", inputs.name?.value ?? "");
+        formData.append("email", inputs.email.value);
+        formData.append("password", inputs.password.value);
+        formData.append("image", inputs.image?.value ?? "");
         resData = await sendRequest({
           url: "http://localhost:5000/api/users/signup",
           method: "POST",
-          body: JSON.stringify({
-            name: inputs.name?.value,
-            email: inputs.email.value,
-            password: inputs.password.value,
-          }),
-          headers: { "Content-Type": "application/json" },
+          body: formData,
         });
       }
 
@@ -74,7 +74,7 @@ const Auth = () => {
         {
           ...inputs,
           name: undefined,
-          image: undefined
+          image: undefined,
         },
         inputs.email.isValid && inputs.password.isValid
       );
@@ -88,8 +88,8 @@ const Auth = () => {
           },
           image: {
             value: null,
-            isValid: false
-          }
+            isValid: false,
+          },
         },
         false
       );
