@@ -62,7 +62,7 @@ const Auth = () => {
         });
       }
 
-      login(resData.user.id);
+      login(resData.userId , resData.token);
     } catch (err) {
       console.log(err);
     }

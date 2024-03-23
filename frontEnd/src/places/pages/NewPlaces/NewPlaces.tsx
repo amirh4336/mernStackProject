@@ -18,7 +18,7 @@ import { AuthContext } from "../../../shared/context/auth-context";
 import ImageUpload from "../../../shared/components/FormElements/ImageUpload/ImageUpload";
 
 const NewPlaces = () => {
-  const { userId } = useContext(AuthContext);
+  const { userId , token} = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const [formState, inputHandler] = useForm<AddInputs>(
@@ -48,6 +48,7 @@ const NewPlaces = () => {
   const placeSubmitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
+      console.log(userId);
       const formData = new FormData();
       formData.append("title", formState.inputs.title?.value ?? "");
       formData.append("description", formState.inputs.description.value);
@@ -58,6 +59,7 @@ const NewPlaces = () => {
         url: "http://localhost:5000/api/places",
         method: "POST",
         body: formData,
+        headers: { Authorization: `Bearer ${token}` },
       });
       navigate("/");
     } catch (error) {
