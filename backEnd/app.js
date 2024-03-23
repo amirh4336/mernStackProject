@@ -49,7 +49,7 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    "mongodb://root:brNuxrnv8olXFOY3fdfYak7T@denali.liara.cloud:34346/mern?authSource=admin&replicaSet=rs0&directConnection=true"
+    `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@denali.liara.cloud:34346/${process.env.DB_NAME}?authSource=admin&replicaSet=rs0&directConnection=true`
   )
   .then(() => {
     app.listen(5000);
