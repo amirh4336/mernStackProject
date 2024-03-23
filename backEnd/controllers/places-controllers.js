@@ -45,7 +45,7 @@ const getPlacesByUserId = async (req, res, next) => {
     );
     return next(error);
   }
-  if (!userWithPlaces || userWithPlaces.places.length === 0) {
+  if (!userWithPlaces) {
     return next(
       new HttpError("Could not find a place for the provided id.", 404)
     );
@@ -85,7 +85,7 @@ const createPlace = async (req, res, next) => {
   try {
     user = await User.findById(creator);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     const error = new HttpError(
       "Creatinng place failed, please try again",
       500
