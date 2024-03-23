@@ -8,13 +8,15 @@ import {
 } from "../../../shared/util/validators";
 import Button from "../../../shared/components/FormElements/Button/Button";
 import { useForm } from "../../../shared/hooks/form-hooks/form-hooks";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 import Card from "../../../shared/components/UIElements/Card/Card";
 import { useHttpClient } from "../../../shared/hooks/http-hook";
 import ErrorModal from "../../../shared/components/UIElements/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../../shared/components/UIElements/LoadingSpinner/LoadingSpinner";
+import { AuthContext } from "../../../shared/context/auth-context";
 const UpdatePlace = () => {
   const { isLoading, sendRequest, error, clearError } = useHttpClient();
+  const { token } = useContext(AuthContext);
   const [identifedPlace, setIdentifedPlace] = useState<{
     title: string;
     description: string;
@@ -41,6 +43,9 @@ const UpdatePlace = () => {
       try {
         const resData = await sendRequest({
           url: `http://localhost:5000/api/places/${placeId}`,
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
         setIdentifedPlace(resData.place);
         setFormData(
@@ -61,7 +66,7 @@ const UpdatePlace = () => {
       }
     };
     sendHandler();
-  }, [sendRequest, placeId, setFormData]);
+  }, [sendRequest, placeId, setFormData, token]);
 
   const updatePlaceSubmitHandler = async (
     event: FormEvent<HTMLFormElement>
@@ -75,7 +80,10 @@ const UpdatePlace = () => {
           title: inputs.title.value,
           description: inputs.description.value,
         }),
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       });
       navigate(-1);
     } catch (error) {

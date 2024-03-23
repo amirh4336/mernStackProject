@@ -29,7 +29,7 @@ export interface IPlaceItemProps {
 const PlaceItem: FC<IPlaceItemProps> = ({ item, onDelete }) => {
   const { id, image, title, address, description, location, creator } = item;
 
-  const { isLoggedIn, userId } = useContext(AuthContext);
+  const { isLoggedIn, userId , token } = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [showMap, setShowMap] = useState(false);
 
@@ -56,6 +56,7 @@ const PlaceItem: FC<IPlaceItemProps> = ({ item, onDelete }) => {
       await sendRequest({
         url: `http://localhost:5000/api/places/${id}`,
         method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
       });
       onDelete(id);
     } catch (err) {
