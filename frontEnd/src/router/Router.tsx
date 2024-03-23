@@ -1,12 +1,21 @@
+/* eslint-disable react-refresh/only-export-components */
+import { Suspense, lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import Users from "../user/pages/Users";
-import NotFound from "../shared/pages/NotFound";
-import NewPlaces from "../places/pages/NewPlaces/NewPlaces";
+
+// layout
 import RootLayout from "../layout/RootLayout";
-import UserPlaces from "../places/pages/UserPlaces";
-import UpdatePlace from "../places/pages/UpdatePlace/UpdatePlace";
-import Auth from "../user/pages/Auth/Auth";
 import AuthLayout from "../layout/AuthLayout";
+import LoadingSpinner from "../shared/components/UIElements/LoadingSpinner/LoadingSpinner";
+
+// pages
+const Users = lazy(() => import("../user/pages/Users"));
+const NotFound = lazy(() => import("../shared/pages/NotFound"));
+const NewPlaces = lazy(() => import("../places/pages/NewPlaces/NewPlaces"));
+const UserPlaces = lazy(() => import("../places/pages/UserPlaces"));
+const UpdatePlace = lazy(
+  () => import("../places/pages/UpdatePlace/UpdatePlace")
+);
+const Auth = lazy(() => import("../user/pages/Auth/Auth"));
 
 const router = createBrowserRouter([
   {
@@ -15,32 +24,92 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Users />,
+        element: (
+          <Suspense
+            fallback={
+              <div className="center">
+                <LoadingSpinner />
+              </div>
+            }
+          >
+            <Users />
+          </Suspense>
+        ),
       },
       {
         element: <AuthLayout />,
         children: [
           {
             path: "/places/new",
-            element: <NewPlaces />,
+            element: (
+              <Suspense
+                fallback={
+                  <div className="center">
+                    <LoadingSpinner />
+                  </div>
+                }
+              >
+                <NewPlaces />
+              </Suspense>
+            ),
           },
           {
             path: "/places/:placeId",
-            element: <UpdatePlace />,
+            element: (
+              <Suspense
+                fallback={
+                  <div className="center">
+                    <LoadingSpinner />
+                  </div>
+                }
+              >
+                <UpdatePlace />
+              </Suspense>
+            ),
           },
         ],
       },
       {
         path: "/:userId/places",
-        element: <UserPlaces />,
+        element: (
+          <Suspense
+            fallback={
+              <div className="center">
+                <LoadingSpinner />
+              </div>
+            }
+          >
+            <UserPlaces />
+          </Suspense>
+        ),
       },
       {
         path: "/auth",
-        element: <Auth />,
+        element: (
+          <Suspense
+            fallback={
+              <div className="center">
+                <LoadingSpinner />
+              </div>
+            }
+          >
+            <Auth />
+          </Suspense>
+        ),
       },
       {
         path: "*",
-        element: <NotFound />,
+        element: (
+          <Suspense
+            fallback={
+              <div className="center">
+                <LoadingSpinner />
+              </div>
+            }
+          >
+            <NotFound />
+          </Suspense>
+        ),
       },
     ],
   },

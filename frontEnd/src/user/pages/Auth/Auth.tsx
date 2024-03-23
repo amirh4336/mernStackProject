@@ -102,7 +102,7 @@ const Auth = () => {
   }
 
   return (
-    <>
+    <div className="center">
       {error && <ErrorModal error={error} onClear={clearError} />}
       <Card className="authentication">
         {isLoading && <LoadingSpinner asOverlay />}
@@ -149,7 +149,7 @@ const Auth = () => {
           SWITCH TO {!isLoginMode ? "LOGIN" : "SIGNUP"}
         </Button>
       </Card>
-    </>
+    </div>
   );
 };
 
