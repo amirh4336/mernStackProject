@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner/LoadingSpinner";
+import { IPlaceItemProps } from "../components/PlaceItem/PlaceItem";
 
 const UserPlaces = () => {
   const userId = useParams().userId;
@@ -25,6 +26,15 @@ const UserPlaces = () => {
     };
     sendHandler();
   }, [sendRequest, userId]);
+
+  const placeDeleteHandler = (deletedPlaceId: string) => {
+    setLoadedPlaces((prevPlaces) =>
+      prevPlaces.filter(
+        (place: IPlaceItemProps["item"]) => place.id !== deletedPlaceId
+      )
+    );
+  };
+
   return (
     <>
       {error && <ErrorModal error={error} onClear={clearError} />}
@@ -33,7 +43,9 @@ const UserPlaces = () => {
           <LoadingSpinner />
         </div>
       )}
-      {!isLoading && loadedPlaces && <PlaceList items={loadedPlaces} />}
+      {!isLoading && loadedPlaces && (
+        <PlaceList items={loadedPlaces} onDelete={placeDeleteHandler} />
+      )}
     </>
   );
 };

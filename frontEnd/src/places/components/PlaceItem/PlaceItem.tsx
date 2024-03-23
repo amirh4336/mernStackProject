@@ -6,30 +6,31 @@ import Map from "../../../shared/components/UIElements/Map/Map";
 
 import "./PlaceItem.css";
 import { AuthContext } from "../../../shared/context/auth-context";
+import { useHttpClient } from "../../../shared/hooks/http-hook";
+import ErrorModal from "../../../shared/components/UIElements/ErrorModal/ErrorModal";
+import LoadingSpinner from "../../../shared/components/UIElements/LoadingSpinner/LoadingSpinner";
 
 export interface IPlaceItemProps {
-  id: string;
-  image: string;
-  title: string;
-  description: string;
-  address: string;
-  creator: string;
-  location: {
-    lat: number;
-    lng: number;
+  item: {
+    id: string;
+    image: string;
+    title: string;
+    description: string;
+    address: string;
+    creator: string;
+    location: {
+      lat: number;
+      lng: number;
+    };
   };
+  onDelete: (deletedPlaceId : string) => void;
 }
 
-const PlaceItem: FC<IPlaceItemProps> = ({
-  id,
-  image,
-  title,
-  address,
-  description,
-  location,
-}) => {
-  const { isLoggedIn } = useContext(AuthContext);
+const PlaceItem: FC<IPlaceItemProps> = ({ item, onDelete }) => {
+  const { id, image, title, address, description, location } = item;
 
+  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [showMap, setShowMap] = useState(false);
 
   const [showConfirimModal, setShowConfirmModal] = useState(false);
@@ -50,13 +51,23 @@ const PlaceItem: FC<IPlaceItemProps> = ({
     setShowConfirmModal(false);
   };
 
-  const confirmDeleteHandler = () => {
-    setShowConfirmModal(false);
-    console.log("DELETING");
+  const confirmDeleteHandler = async () => {
+    try {
+      await sendRequest({
+        url: `http://localhost:5000/api/places/${id}`,
+        method: "DELETE",
+      });
+      onDelete(id)
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setShowConfirmModal(false);
+    }
   };
 
   return (
     <>
+      {error && <ErrorModal error={error} onClear={clearError} />}
       <Modal
         show={showMap}
         onCancel={closeMapHandler}
@@ -94,6 +105,7 @@ const PlaceItem: FC<IPlaceItemProps> = ({
           Do you want to delete this place? Please note that it can't be undone
           there after.
         </p>
+        {isLoading && <LoadingSpinner asOverlay />}
       </Modal>
       <li className="place-item">
         <Card className="place-item__content">
