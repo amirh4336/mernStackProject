@@ -14,7 +14,7 @@ export const useForm = <T extends AddInputs | EditInputs | AuthInputs>(
   initialFormValidity: boolean
 ): [
   formState: AllInputs<T>,
-  inputHandler: (id: InputName, value: string, isValid: boolean) => void,
+  inputHandler: (id: InputName, value: string | File | undefined, isValid: boolean) => void,
   setFormData: (inputData: T, formValidity: boolean) => void
 ] => {
   const [formState, dispatch] = useReducer(
@@ -26,7 +26,7 @@ export const useForm = <T extends AddInputs | EditInputs | AuthInputs>(
   );
 
   const inputHandler = useCallback(
-    (id: InputName, value: string, isValid: boolean) => {
+    (id: InputName, value: string | File |undefined, isValid: boolean) => {
       dispatch({
         type: "INPUT_CHANGE",
         value,

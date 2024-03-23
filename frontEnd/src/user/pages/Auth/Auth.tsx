@@ -16,6 +16,7 @@ import { Navigate } from "react-router-dom";
 import LoadingSpinner from "../../../shared/components/UIElements/LoadingSpinner/LoadingSpinner";
 import ErrorModal from "../../../shared/components/UIElements/ErrorModal/ErrorModal";
 import { useHttpClient } from "../../../shared/hooks/http-hook";
+import ImageUpload from "../../../shared/components/FormElements/ImageUpload/ImageUpload";
 const Auth = () => {
   const { isLoggedIn, login } = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -73,6 +74,7 @@ const Auth = () => {
         {
           ...inputs,
           name: undefined,
+          image: undefined
         },
         inputs.email.isValid && inputs.password.isValid
       );
@@ -84,6 +86,10 @@ const Auth = () => {
             value: "",
             isValid: false,
           },
+          image: {
+            value: null,
+            isValid: false
+          }
         },
         false
       );
@@ -104,15 +110,18 @@ const Auth = () => {
         <hr />
         <form onSubmit={authSubmitHandler}>
           {!isLoginMode && (
-            <Input
-              id={InputName.name}
-              elementProps="input"
-              type="text"
-              label="Your Name"
-              validators={[VALIDATOR_REQUIRE()]}
-              onInput={inputHandler}
-              errorText="Please enter a name"
-            />
+            <>
+              <Input
+                id={InputName.name}
+                elementProps="input"
+                type="text"
+                label="Your Name"
+                validators={[VALIDATOR_REQUIRE()]}
+                onInput={inputHandler}
+                errorText="Please enter a name"
+              />
+              <ImageUpload center id={InputName.image} onInput={inputHandler} />
+            </>
           )}
           <Input
             id={InputName.email}

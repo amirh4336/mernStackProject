@@ -24,10 +24,9 @@ const formReducer = <T extends AddInputs | EditInputs | AuthInputs>(
             formIsValid =
               formIsValid && state.inputs[inputId as AddInputNames].isValid;
           } else if ("email" in state.inputs) {
-            formIsValid =
-              (formIsValid &&
-                state.inputs[inputId as AuthInputNames]?.isValid) ||
-              formIsValid;
+            formIsValid = formIsValid
+              ? state.inputs[inputId as AuthInputNames]?.isValid ?? formIsValid
+              : formIsValid;
           } else {
             formIsValid =
               formIsValid && state.inputs[inputId as EditInputNames].isValid;
