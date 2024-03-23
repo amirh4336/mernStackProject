@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./UpdatePlace.css";
 import Input from "../../../shared/components/FormElements/Input/Input";
 import { EditInputs, InputName } from "../../../shared/hooks/form-hooks/types";
@@ -11,14 +11,16 @@ import { useForm } from "../../../shared/hooks/form-hooks/form-hooks";
 import { FormEvent, useEffect, useState } from "react";
 import Card from "../../../shared/components/UIElements/Card/Card";
 import { useHttpClient } from "../../../shared/hooks/http-hook";
-// import ErrorModal from "../../../shared/components/UIElements/ErrorModal/ErrorModal";
+import ErrorModal from "../../../shared/components/UIElements/ErrorModal/ErrorModal";
+import LoadingSpinner from "../../../shared/components/UIElements/LoadingSpinner/LoadingSpinner";
 const UpdatePlace = () => {
-  const { isLoading, sendRequest } = useHttpClient();
+  const { isLoading, sendRequest, error, clearError } = useHttpClient();
   const [identifedPlace, setIdentifedPlace] = useState<{
     title: string;
     description: string;
   }>();
   const placeId = useParams().placeId;
+  const navigate = useNavigate();
 
   const [{ inputs, isValid }, inputHandler, setFormData] = useForm<EditInputs>(
     {
@@ -33,8 +35,6 @@ const UpdatePlace = () => {
     },
     false
   );
-
-  // const identifedPlace = DUMMY_PLACES.find((p) => p.id === placeId);
 
   useEffect(() => {
     const sendHandler = async () => {
@@ -63,12 +63,27 @@ const UpdatePlace = () => {
     sendHandler();
   }, [sendRequest, placeId, setFormData]);
 
-  const updatePlaceSubmitHandler = (event: FormEvent<HTMLFormElement>) => {
+  const updatePlaceSubmitHandler = async (
+    event: FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
-    console.log(inputs);
+    try {
+      await sendRequest({
+        url: `http://localhost:5000/api/places/${placeId}`,
+        method: "PATCH",
+        body: JSON.stringify({
+          title: inputs.title.value,
+          description: inputs.description.value,
+        }),
+        headers: { "Content-Type": "application/json" },
+      });
+      navigate(-1);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  if (!identifedPlace) {
+  if (!identifedPlace && !error) {
     return (
       <div className="center">
         <Card>
@@ -81,15 +96,15 @@ const UpdatePlace = () => {
   if (isLoading) {
     return (
       <div className="center">
-        <h2>Loading...</h2>
+        <LoadingSpinner />
       </div>
     );
   }
 
   return (
     <>
-      {/* {error && <ErrorModal error={error} onClear={clearError} />} */}
-      {!isLoading && (
+      {error && <ErrorModal error={error} onClear={clearError} />}
+      {!isLoading && identifedPlace && (
         <form className="place-form" onSubmit={updatePlaceSubmitHandler}>
           <Input
             id={InputName.title}
