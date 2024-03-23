@@ -18,7 +18,7 @@ import { AuthContext } from "../../../shared/context/auth-context";
 import ImageUpload from "../../../shared/components/FormElements/ImageUpload/ImageUpload";
 
 const NewPlaces = () => {
-  const { userId , token} = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const [formState, inputHandler] = useForm<AddInputs>(
@@ -48,12 +48,10 @@ const NewPlaces = () => {
   const placeSubmitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      console.log(userId);
       const formData = new FormData();
       formData.append("title", formState.inputs.title?.value ?? "");
       formData.append("description", formState.inputs.description.value);
       formData.append("address", formState.inputs.address.value);
-      formData.append("creator", userId ?? "");
       formData.append("image", formState.inputs.image?.value ?? "");
       await sendRequest({
         url: "http://localhost:5000/api/places",
