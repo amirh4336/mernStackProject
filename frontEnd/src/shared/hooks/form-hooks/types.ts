@@ -4,9 +4,16 @@ export type EditInputNames = "title" | "description";
 
 export type AuthInputNames = "email" | "password" | "name";
 
-export type AddInputs = {
+type AddInputsBase = {
   [key in AddInputNames]: {
     value: string;
+    isValid: boolean;
+  };
+};
+
+export type AddInputs = AddInputsBase & {
+  image: {
+    value: File | null;
     isValid: boolean;
   };
 };

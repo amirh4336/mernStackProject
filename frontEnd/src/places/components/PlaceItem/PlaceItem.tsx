@@ -110,7 +110,12 @@ const PlaceItem: FC<IPlaceItemProps> = ({ item, onDelete }) => {
       <li className="place-item">
         <Card className="place-item__content">
           <div className="palce-item__image">
-            <img src={image} alt={title} height={200} width="100%" />
+            <img
+              src={`http://localhost:5000/${image}`}
+              alt={title}
+              height={200}
+              width="100%"
+            />
           </div>
           <div className="place-item__info">
             <h2>{title}</h2>
