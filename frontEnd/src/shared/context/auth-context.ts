@@ -5,7 +5,7 @@ export const AuthContext = createContext<{
   userId: null | string;
   token: null | string;
   logout: () => void;
-  login: (uid: string, token: string) => void;
+  login: (uid: string, token: string , expiration?: Date) => void;
 }>({
   isLoggedIn: false,
   token: null,
