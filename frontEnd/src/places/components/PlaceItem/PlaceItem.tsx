@@ -23,13 +23,13 @@ export interface IPlaceItemProps {
       lng: number;
     };
   };
-  onDelete: (deletedPlaceId : string) => void;
+  onDelete: (deletedPlaceId: string) => void;
 }
 
 const PlaceItem: FC<IPlaceItemProps> = ({ item, onDelete }) => {
-  const { id, image, title, address, description, location } = item;
+  const { id, image, title, address, description, location, creator } = item;
 
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, userId } = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [showMap, setShowMap] = useState(false);
 
@@ -57,7 +57,7 @@ const PlaceItem: FC<IPlaceItemProps> = ({ item, onDelete }) => {
         url: `http://localhost:5000/api/places/${id}`,
         method: "DELETE",
       });
-      onDelete(id)
+      onDelete(id);
     } catch (err) {
       console.log(err);
     } finally {
@@ -121,7 +121,7 @@ const PlaceItem: FC<IPlaceItemProps> = ({ item, onDelete }) => {
             <Button inverse onClick={openMapHandler}>
               View on map
             </Button>
-            {isLoggedIn && (
+            {isLoggedIn && userId === creator && (
               <>
                 <Button to={`/places/${id}`}>Edit</Button>
                 <Button danger onClick={showDeleteWarningHandler}>
